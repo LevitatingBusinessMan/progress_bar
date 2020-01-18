@@ -31,7 +31,7 @@ class ProgressBar {
             () => ({
                 openBracket: "[",
                 progress: "=",
-                indicator: this.percentage() + "%",
+                indicator: (this.percentage() == 0 ? "00" : this.percentage()) + "%",
                 left: " ",
                 closeBracket: "]"
             })
@@ -52,11 +52,26 @@ class ProgressBar {
 
         let {openBracket, progress, indicator, left, closeBracket} = (typeof style == "function" ? style.call(this) : style);
 
-        return (openBracket ? openBracket : "")
-            + progress.repeat( ((this.done/this.total) * length) - (indicator ? 0:1) )
+		let barLength = Math.floor((this.done/this.total) * length);
+		let emptyLength = length - barLength;
+
+		//Remove 1 char that'll be replaced by the indicator
+		if (barLength > 0 && indicator) {
+			barLength -= indicator.length;
+		}
+
+		//Make space for indicator char which is present even when no progress is made
+		if (barLength == 0 && indicator) {
+			emptyLength -= indicator.length;
+		}
+
+        return (
+        	(openBracket ? openBracket : "")
+            + progress.repeat(barLength)
             + (indicator ? indicator : "")
-            + left.repeat( (1 - (this.done/this.total)) * length)
-            + (closeBracket ? closeBracket : "");
+            + left.repeat(emptyLength)
+            + (closeBracket ? closeBracket : "")
+        );
     }
 
     setStyle(int) {
