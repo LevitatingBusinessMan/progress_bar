@@ -53,17 +53,23 @@ class ProgressBar {
         let {openBracket, progress, indicator, left, closeBracket} = (typeof style == "function" ? style.call(this) : style);
 
 		let barLength = Math.floor((this.done/this.total) * length);
-		let emptyLength = length - barLength;
+        let emptyLength = length - barLength;
+
+
+        // These two if statements prevent the program from crashing when overflowing the bar
+        if (barLength > length)
+            barLength = length
+
+        if (emptyLength < 0)
+            emptyLength = 0;
 
 		//Remove 1 char that'll be replaced by the indicator
-		if (barLength > 0 && indicator) {
+		if (barLength > 0 && indicator)
 			barLength -= indicator.length;
-		}
 
 		//Make space for indicator char which is present even when no progress is made
-		if (barLength == 0 && indicator) {
+		else if (barLength == 0 && indicator)
 			emptyLength -= indicator.length;
-		}
 
         return (
         	(openBracket ? openBracket : "")

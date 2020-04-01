@@ -4,7 +4,7 @@ const PB = new ProgressBar(100)
 
 console.log("Style 0:")
 console.log(`${PB.display()} ${PB.percentage()}%`)
-PB.add(1)
+PB.add(2)
 console.log(`${PB.display()} ${PB.percentage()}%`)
 PB.add(59)
 console.log(`${PB.display()} ${PB.percentage()}%`)
